@@ -1,0 +1,47 @@
+This is an ldap source adapter for grouper using the ldap library from Virginia Tech
+(http://code.google.com/p/vt-middleware/wiki/vtldap)
+
+Jim Fox
+University of Washington
+fox@washington.edu
+
+-------------------------------------------------------------------------------
+
+We use sasl external auth with certificates exclusively, and I can't test 
+anything else.  Should work with principal+password.
+We also use PEM certs and keys.  Should work OK with plain old java keystore
+and the various command line settings that go with it.
+
+-------------------------------------------------------------------------------
+
+
+build with 
+
+ # ant jar
+
+builds dist/ldap-source-adapter.jar
+
+copy that to your grouper's lib/custom  directory
+
+You might also need in grouper's lib/custom thesei jars:  (all should be found in ./lib)
+
+   ( newer versions are probably OK.  these can be found in ./lib/  )
+
+   bcprov-ext-jdk16-141.jar 
+   bcprov-jdk16-141.jar
+   commons-pool-1.2.jar   (used for logging.  grouper also uses some of these, so maybe already there )
+   vt-ldap-3.3.2.jar      (VT's library, http://code.google.com/p/vt-middleware/downloads/list)
+   
+to configure use the sample.sources.xml and sample.ldap.properties as guides.
+
+
+The adapter provides a last name, first name search to cut down on the responses 
+when looking for, say, somebody named johnson. 
+In the search field you can specify:  "last_name, first_name"
+and use asterisk as a wild card, e.g.  "johnson, a*"
+
+see the sample to configure last and first.
+
+
+
+  

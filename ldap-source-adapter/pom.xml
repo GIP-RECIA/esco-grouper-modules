@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>esco-grouper-parent</artifactId>
+    <groupId>org.esco.grouper</groupId>
+    <version>0.0.1</version>
+  </parent>
+  <groupId>edu.internet2.middleware.subject.provider</groupId>
+  <artifactId>ldap-source-adapter</artifactId>
+  <version>0.0.1</version>
+  <name>ldap-source-adapter</name>
+  <description>Ldap source adapter realised by Washington University</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-ext-jdk16</artifactId>
+      <version>1.45</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk16</artifactId>
+      <version>1.45</version>
+    </dependency>
+	<dependency>
+	  <groupId>edu.vt.middleware</groupId>
+	  <artifactId>vt-ldap</artifactId>
+	  <version>3.3.3</version>
+	</dependency>
+	<dependency>
+      <groupId>commons-pool</groupId>
+      <artifactId>commons-pool</artifactId>
+      <version>1.2</version>
+    </dependency>
+  </dependencies>
+</project>
