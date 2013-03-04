@@ -3,11 +3,11 @@
   <parent>
     <artifactId>esco-grouper-parent</artifactId>
     <groupId>org.esco.grouper</groupId>
-    <version>0.0.1</version>
+    <version>0.0.3-grouper-1.6.3</version>
   </parent>
   <groupId>edu.internet2.middleware.subject.provider</groupId>
   <artifactId>ldap-source-adapter</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.3-grouper-1.6.3</version>
   <name>ldap-source-adapter</name>
   <description>Ldap source adapter realised by Washington University</description>
   <dependencies>

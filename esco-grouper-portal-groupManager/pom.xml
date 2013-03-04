@@ -2,12 +2,12 @@
 	<parent>
 		<artifactId>esco-grouper-parent</artifactId>
 		<groupId>org.esco.grouper</groupId>
-		<version>0.0.1</version>
+		<version>0.0.3-grouper-1.6.3</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.esco.grouper</groupId>
 	<artifactId>esco-grouper-portal-groupManager</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.3-grouper-1.6.3</version>
 	<packaging>jar</packaging>
 	<name>esco-grouper-portal-groupManager</name>
 	<description>Module pour la recherche des groupes Grouper intégrée dans le portail</description>
@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>org.esco.grouper</groupId>
 			<artifactId>esco-grouper-commons</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.3-grouper-1.6.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jasig.portal</groupId>

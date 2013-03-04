@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.esco.grouper</groupId>
 	<artifactId>esco-grouper-parent</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.3-grouper-1.6.3</version>
 	<packaging>pom</packaging>
 	<name>esco-grouper-parent</name>
 	<description>Projet parent esco-grouper</description>
@@ -18,11 +18,16 @@
 		<module>ldap-source-adapter</module>
 	</modules>
 	<scm>
-		<connection>scm:svn:svn+ssh://jgribonvald@svn.giprecia.fr/srv/svn/esco/grouper/ESCO-Grouper/tags/esco-grouper-parent-0.0.1</connection>
-		<developerConnection>scm:svn:svn+ssh://jgribonvald@svn.giprecia.fr/srv/svn/esco/grouper/ESCO-Grouper/tags/esco-grouper-parent-0.0.1</developerConnection>
-		<tag>svn+ssh://jgribonvald@svn.giprecia.fr/srv/svn/esco/grouper/ESCO-Grouper/tags/</tag>
-		<url>svn+ssh://jgribonvald@svn.giprecia.fr/srv/svn/esco/grouper/ESCO-Grouper/tags/esco-grouper-parent-0.0.1</url>
+		<connection>scm:svn:svn+ssh://jgribonvald@svn.giprecia.fr/srv/svn/esco/grouper/ESCO-Grouper/tags/esco-grouper-parent-0.0.3-grouper-1.6.3</connection>
+		<developerConnection>scm:svn:svn+ssh://jgribonvald@svn.giprecia.fr/srv/svn/esco/grouper/ESCO-Grouper/tags/esco-grouper-parent-0.0.3-grouper-1.6.3</developerConnection>
+		<url>svn+ssh://jgribonvald@svn.giprecia.fr/srv/svn/esco/grouper/ESCO-Grouper/tags/esco-grouper-parent-0.0.3-grouper-1.6.3</url>
 	</scm>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<grouper.version>1.6.3</grouper.version>
+		<spring.version>2.5.5</spring.version>
+		<mysql.version>5.1.6</mysql.version>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -46,12 +51,6 @@
 			</resource>
 		</resources>
 	</build>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<grouper.version>1.6.3</grouper.version>
-		<spring.version>2.5.5</spring.version>
-		<mysql.version>5.1.6</mysql.version>
-	</properties>
 	<repositories>
 		<!-- <repository>
 			<id>grouper.internet2.edu</id>
@@ -60,11 +59,11 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository> -->
+		</repository>-->
 		<repository>
 			<id>esco-grouper</id>
 			<name>esco-grouper</name>
-			<url>http://www.esco-portail.org/nexus/content/repositories/ESCO-Grouper</url>
+			<url>http://www.esco-portail.org/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 	<dependencies>
