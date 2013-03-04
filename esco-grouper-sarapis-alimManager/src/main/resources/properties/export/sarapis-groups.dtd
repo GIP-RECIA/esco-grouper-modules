@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT sarapis-group-service (comment?, user, delete-empty-folders?, delete-empty-groups?, force-privileges?, ordered-template-elements?, (folder|folder-template)+) >
+<!ELEMENT ordered-template-elements (comment?, template-element+)>
+<!ELEMENT template-element ANY>
+<!ELEMENT folder (comment?, privileges?,(folder|folder-template|group|group-template)*) >
+<!ELEMENT folder-template (comment?, privileges?,(folder|folder-template|group|group-template)*) >
+<!ELEMENT group (comment?, privileges?, member-of*, members*) >
+<!ELEMENT group-template (comment?, privileges?, member-of*, members*) >
+<!ELEMENT privileges (comment?, privilege+) >
+<!ELEMENT comment ANY>
+<!ELEMENT privilege ANY>
+<!ELEMENT member-of ANY>
+<!ELEMENT members ANY>
+<!ELEMENT user ANY>
+<!ELEMENT delete-empty-folders ANY>
+<!ELEMENT delete-empty-groups ANY>
+<!ELEMENT force-privileges ANY>
+
+<!ATTLIST user
+	uid CDATA #REQUIRED>
+
+<!ATTLIST delete-empty-folders
+	value CDATA #REQUIRED>
+
+<!ATTLIST delete-empty-groups
+	value CDATA #REQUIRED>
+
+<!ATTLIST force-privileges
+	value CDATA #REQUIRED>
+
+<!ATTLIST folder
+	extension CDATA #REQUIRED
+	display-extension CDATA #REQUIRED
+	description CDATA #REQUIRED
+	preexisting CDATA #IMPLIED
+	create CDATA #IMPLIED>
+
+<!ATTLIST template-element
+	key CDATA #REQUIRED
+	default-value CDATA #IMPLIED>
+
+<!ATTLIST folder-template
+	extension CDATA #REQUIRED
+	display-extension CDATA #REQUIRED
+	description CDATA #REQUIRED
+	create CDATA #IMPLIED>
+
+<!ATTLIST group
+	extension CDATA #REQUIRED
+	display-extension CDATA #REQUIRED
+	description CDATA #REQUIRED
+	preexisting CDATA #IMPLIED
+	create CDATA #IMPLIED>
+
+<!ATTLIST group-template
+	extension CDATA #REQUIRED
+	display-extension CDATA #REQUIRED
+	description CDATA #REQUIRED
+	create CDATA #IMPLIED>
+
+<!ATTLIST privilege
+	right CDATA #REQUIRED
+	path CDATA #REQUIRED
+	recursive CDATA #IMPLIED>
+
+<!ATTLIST member-of
+	path CDATA #REQUIRED
+	condition-group-ext CDATA #IMPLIED>
+
+<!ATTLIST members
+	type CDATA #REQUIRED
+	distribution-by CDATA #IMPLIED>
+
