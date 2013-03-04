@@ -17,6 +17,11 @@
 		<module>esco-grouper-sarapis-alimManager</module>
 		<module>ldap-source-adapter</module>
 	</modules>
+	<scm>
+        	<connection>scm:git:git://github.com/GIP-RECIA/esco-grouper-modules.git</connection>
+        	<developerConnection>scm:git:git@github.com:GIP-RECIA/esco-grouper-modules.git</developerConnection>
+        	<url>https://github.com/GIP-RECIA/esco-grouper-modules.git</url>
+  	</scm>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<grouper.version>1.6.3</grouper.version>
