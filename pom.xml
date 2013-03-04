@@ -17,11 +17,6 @@
 		<module>esco-grouper-sarapis-alimManager</module>
 		<module>ldap-source-adapter</module>
 	</modules>
-	<scm>
-		<connection>scm:svn:svn+ssh://jgribonvald@svn.giprecia.fr/srv/svn/esco/grouper/ESCO-Grouper/tags/esco-grouper-parent-0.0.4-grouper-1.6.3</connection>
-		<developerConnection>scm:svn:svn+ssh://jgribonvald@svn.giprecia.fr/srv/svn/esco/grouper/ESCO-Grouper/tags/esco-grouper-parent-0.0.4-grouper-1.6.3</developerConnection>
-		<url>svn+ssh://jgribonvald@svn.giprecia.fr/srv/svn/esco/grouper/ESCO-Grouper/tags/esco-grouper-parent-0.0.4-grouper-1.6.3</url>
-	</scm>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<grouper.version>1.6.3</grouper.version>
