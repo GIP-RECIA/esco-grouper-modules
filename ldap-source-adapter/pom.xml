@@ -3,7 +3,7 @@
   <parent>
     <artifactId>esco-grouper-parent</artifactId>
     <groupId>org.esco.grouper</groupId>
-    <version>0.0.4-grouper-1.6.3-SNAPSHOT</version>
+    <version>0.0.4-grouper-1.6.3</version>
   </parent>
   <groupId>edu.internet2.middleware.subject.provider</groupId>
   <artifactId>ldap-source-adapter</artifactId>
