@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.esco.grouper</groupId>
 	<artifactId>esco-grouper-parent</artifactId>
-	<version>0.0.4-grouper-1.6.3</version>
+	<version>0.0.5-grouper-1.6.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>esco-grouper-parent</name>
 	<description>Projet parent esco-grouper</description>
