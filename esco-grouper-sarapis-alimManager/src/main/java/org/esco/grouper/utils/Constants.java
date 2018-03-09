@@ -53,6 +53,16 @@ public abstract class Constants {
     /** The create privilege for the stems. */
     public static final Privilege CREATE_PRIV = Privilege.getInstance("create");
 
+    /** The stem attribute privilege for the stem. */
+    public static final Privilege STEM_ATTR_READ_PRIV = Privilege.getInstance("stemAttrRead");
+
+    /** The stem admin privilege for the stem. */
+    public static final Privilege STEM_ADMIN_PRIV = Privilege.getInstance("stemAdmin");
+
+    /* The stem update privilege for the stem. */
+    public static final Privilege STEM_ATTR_UPDATE_PRIV = Privilege.getInstance("stemAttrUpdate");
+
+
     /**
      * Builds an instance of Constants.
      */

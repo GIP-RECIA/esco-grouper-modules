@@ -18,6 +18,8 @@
 
 package org.esco.grouper.dao;
 
+import java.util.Set;
+
 import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GroupFinder;
 import edu.internet2.middleware.grouper.GrouperSession;
@@ -27,27 +29,10 @@ import edu.internet2.middleware.grouper.Membership;
 import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.SubjectFinder;
-import edu.internet2.middleware.grouper.exception.GrantPrivilegeException;
-import edu.internet2.middleware.grouper.exception.GroupAddException;
-import edu.internet2.middleware.grouper.exception.GroupDeleteException;
-import edu.internet2.middleware.grouper.exception.GroupModifyException;
-import edu.internet2.middleware.grouper.exception.GroupNotFoundException;
-import edu.internet2.middleware.grouper.exception.InsufficientPrivilegeException;
-import edu.internet2.middleware.grouper.exception.MemberAddException;
-import edu.internet2.middleware.grouper.exception.MemberDeleteException;
-import edu.internet2.middleware.grouper.exception.MemberNotFoundException;
-import edu.internet2.middleware.grouper.exception.SchemaException;
-import edu.internet2.middleware.grouper.exception.StemAddException;
-import edu.internet2.middleware.grouper.exception.StemDeleteException;
-import edu.internet2.middleware.grouper.exception.StemModifyException;
-import edu.internet2.middleware.grouper.exception.StemNotFoundException;
+import edu.internet2.middleware.grouper.exception.*;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import edu.internet2.middleware.subject.SubjectNotUniqueException;
-
-
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.esco.grouper.cache.SGSCache;
 import org.esco.grouper.domain.beans.EvaluableStringCondition;
@@ -59,7 +44,6 @@ import org.esco.grouper.domain.beans.PrivilegeDefinition;
 import org.esco.grouper.domain.beans.PrivilegeDefinition.Right;
 import org.esco.grouper.exceptions.EscoGrouperException;
 import org.esco.grouper.utils.Constants;
-import org.springframework.beans.factory.InitializingBean;
 
 /**
  * DAO for the Grouper groups or stems manipulations.
@@ -67,7 +51,7 @@ import org.springframework.beans.factory.InitializingBean;
  * 29 July 08
  *
  */
-public class GrouperDAO implements InitializingBean {
+public class GrouperDAO {
 
     /** Logger. */
     private static final Logger LOGGER = Logger.getLogger(GrouperDAO.class);
@@ -153,6 +137,15 @@ public class GrouperDAO implements InitializingBean {
                         }
                         if (Right.GROUP_CREATION.equals(privDef.getPrivilege())) {
                             addCreatePrivilege(definition.getPath(), privilegedGroupDef.getPath(), folder, subj);
+                        }
+                        if (Right.FOLDER_ADMIN.equals(privDef.getPrivilege())) {
+                            addAdminStemPrivilege(definition.getPath(), privilegedGroupDef.getPath(), folder, subj);
+                        }
+                        if (Right.FOLDER_ATTR_READ.equals(privDef.getPrivilege())) {
+                            addAttrReadStemPrivilege(definition.getPath(), privilegedGroupDef.getPath(), folder, subj);
+                        }
+                        if (Right.FOLDER_ATTR_UPDATE.equals(privDef.getPrivilege())) {
+                            addAttrUpdateStemPrivilege(definition.getPath(), privilegedGroupDef.getPath(), folder, subj);
                         }
                     } catch (GrantPrivilegeException e) {
                         LOGGER.fatal(e, e);
@@ -402,6 +395,78 @@ public class GrouperDAO implements InitializingBean {
     }
 
     /**
+     * Adds Admin Stem privilege to a folder.
+     * @param folderPath The path of the target folder.
+     * @param privilegedPath The path of the group with privileges.
+     * @param folder The target folder.
+     * @param subject The subject that corresponds to the privileged group.
+     * @throws SchemaException
+     * @throws InsufficientPrivilegeException
+     * @throws GrantPrivilegeException
+     */
+    private void addAdminStemPrivilege(final String folderPath,
+              final String privilegedPath,
+              final Stem folder,
+              final Subject subject)
+            throws GrantPrivilegeException, InsufficientPrivilegeException, SchemaException {
+        if (!folder.hasStemAdmin(subject)) {
+            folder.grantPriv(subject, Constants.STEM_ADMIN_PRIV);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Adding Admin Stem privilege to the group: " + privilegedPath
+                        + " on the folder: " + folderPath + ".");
+            }
+        }
+    }
+
+    /**
+     * Adds Attributes Update Stem privilege to a folder.
+     * @param folderPath The path of the target folder.
+     * @param privilegedPath The path of the group with privileges.
+     * @param folder The target folder.
+     * @param subject The subject that corresponds to the privileged group.
+     * @throws SchemaException
+     * @throws InsufficientPrivilegeException
+     * @throws GrantPrivilegeException
+     */
+    private void addAttrUpdateStemPrivilege(final String folderPath,
+               final String privilegedPath,
+               final Stem folder,
+               final Subject subject)
+            throws GrantPrivilegeException, InsufficientPrivilegeException, SchemaException {
+        if (!folder.hasStemAttrUpdate(subject)) {
+            folder.grantPriv(subject, Constants.STEM_ATTR_UPDATE_PRIV);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Adding Attributes Update Stem privilege to the group: " + privilegedPath
+                        + " on the folder: " + folderPath + ".");
+            }
+        }
+    }
+
+    /**
+     * Adds Attributes Read Stem privilege to a folder.
+     * @param folderPath The path of the target folder.
+     * @param privilegedPath The path of the group with privileges.
+     * @param folder The target folder.
+     * @param subject The subject that corresponds to the privileged group.
+     * @throws SchemaException
+     * @throws InsufficientPrivilegeException
+     * @throws GrantPrivilegeException
+     */
+    private void addAttrReadStemPrivilege(final String folderPath,
+                                            final String privilegedPath,
+                                            final Stem folder,
+                                            final Subject subject)
+            throws GrantPrivilegeException, InsufficientPrivilegeException, SchemaException {
+        if (!folder.hasStemAttrUpdate(subject)) {
+            folder.grantPriv(subject, Constants.STEM_ATTR_READ_PRIV);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Adding Attributes Read Stem privilege to the group: " + privilegedPath
+                        + " on the folder: " + folderPath + ".");
+            }
+        }
+    }
+
+    /**
      * Adds administration privilege to a group.
      * @param groupPath The path of the target group.
      * @param privilegedPath The path of the group with privileges.
@@ -499,15 +564,6 @@ public class GrouperDAO implements InitializingBean {
             }
         }
     }
-
-    /**
-     * Checks the beans injection.
-     * @throws Exception
-     * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
-     */
-	public void afterPropertiesSet() throws Exception {
-		//TODO
-	}
 
     /**
      * Creates a group or a folder.
@@ -619,8 +675,6 @@ public class GrouperDAO implements InitializingBean {
             final String userId,
             final Set<String> result) {
 
-
-
         try {
             Subject subject = SubjectFinder.findById(userId, true);
             final String managerId = session.getSubject().getId();
@@ -630,7 +684,7 @@ public class GrouperDAO implements InitializingBean {
 
             for (Object o : memberships) {
                 final Membership m = (Membership) o;
-                final Group g = m.getGroup();
+                final Group g = m.getOwnerGroup();
                 final String ownerId = retrieveMembershipOwnerIdSafe(m);
                 if (managerId.equals(ownerId)) {
                     result.add(g.getName());
@@ -678,13 +732,13 @@ public class GrouperDAO implements InitializingBean {
 
             for (Object o : memberships) {
                 final Membership m = (Membership) o;
-                m.getGroup().deleteMember(subject);
+                m.getOwnerGroup().deleteMember(subject);
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Removes subject: " + userId
-                            + " from group: " + m.getGroup());
+                            + " from group: " + m.getOwnerGroup());
                 }
 
-                handlesEmptyGroupIfNeeded(session, m.getGroup());
+                handlesEmptyGroupIfNeeded(session, m.getOwnerGroup());
 
 
             }
@@ -726,17 +780,17 @@ public class GrouperDAO implements InitializingBean {
 
             for (Object o : memberships) {
                 final Membership m = (Membership) o;
-                final Group g = m.getGroup();
+                final Group g = m.getOwnerGroup();
 
                 final String ownerId = retrieveMembershipOwnerIdSafe(m);
                 if (managerId.equals(ownerId)) {
-                    m.getGroup().deleteMember(subject);
+                    m.getOwnerGroup().deleteMember(subject);
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("Removes subject: " + userId
-                                + " from group: " + m.getGroup());
+                                + " from group: " + m.getOwnerGroup());
                     }
 
-                    handlesEmptyGroupIfNeeded(session, m.getGroup());
+                    handlesEmptyGroupIfNeeded(session, m.getOwnerGroup());
                 } else {
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("User " + userId + " not removed from "
@@ -852,7 +906,7 @@ public class GrouperDAO implements InitializingBean {
                         handlesEmptyFolderIfNeeded(session, folder);
                         for (Object containingGroupObj : containingGroups) {
                             final Membership containingGroup = (Membership) containingGroupObj;
-                            handlesEmptyGroupIfNeeded(session, containingGroup.getGroup());
+                            handlesEmptyGroupIfNeeded(session, containingGroup.getOwnerGroup());
                         }
 
                         if (LOGGER.isInfoEnabled()) {

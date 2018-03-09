@@ -27,17 +27,15 @@ import edu.internet2.middleware.grouper.exception.SessionException;
 import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import edu.internet2.middleware.subject.SubjectNotUniqueException;
-
 import org.apache.log4j.Logger;
 import org.esco.grouper.exceptions.EscoGrouperException;
-import org.springframework.beans.factory.InitializingBean;
 /**
  * Util class used to handle the grouper sessions.
  * @author GIP RECIA - A. Deman
  * 28 juil. 08
  *
  */
-public class GrouperSessionUtil implements InitializingBean {
+public class GrouperSessionUtil{
 
     /** Logger. */
     private static final Logger LOGGER = Logger.getLogger(GrouperSessionUtil.class);
@@ -58,15 +56,6 @@ public class GrouperSessionUtil implements InitializingBean {
      */
     public GrouperSessionUtil(final String subjectId) {
         this.subjectId = subjectId;
-    }
-
-    /**
-     * Checks the spring data injection.
-     * @throws Exception
-     * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
-     */
-    public void afterPropertiesSet() throws Exception {
-        /* */
     }
 
     /**

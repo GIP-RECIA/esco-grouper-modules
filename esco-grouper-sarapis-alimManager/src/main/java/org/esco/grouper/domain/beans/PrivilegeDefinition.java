@@ -36,12 +36,8 @@ import org.esco.grouper.exceptions.EscoGrouperException;
  */
 public class PrivilegeDefinition implements Serializable {
 
-
-    /** Serial default UID.*/
-    private static final long serialVersionUID = 5449177734260605352L;
-
     /** The type of right. */
-    public static enum Right {
+    public enum Right {
         /** Admin right.*/
         ADMIN,
 
@@ -58,7 +54,16 @@ public class PrivilegeDefinition implements Serializable {
         VIEW,
 
         /** Read privilege.*/
-        READ;
+        READ,
+
+        /** Admin folder privilege. */
+        FOLDER_ADMIN,
+
+        /** Update folder privilege. */
+        FOLDER_ATTR_UPDATE,
+
+        /** Read folder privilege. */
+        FOLDER_ATTR_READ;
 
         /**
          * Parses a string to a Right instance.
@@ -77,7 +82,10 @@ public class PrivilegeDefinition implements Serializable {
                         + Right.VIEW + ", "
                         + Right.READ + ", "
                         + Right.FOLDER_CREATION + ", "
-                        + Right.GROUP_CREATION + ".", e);
+                        + Right.GROUP_CREATION + ", "
+                        + Right.FOLDER_ADMIN + ", "
+                        + Right.FOLDER_ATTR_UPDATE + ", "
+                        + Right.FOLDER_ATTR_READ + ".", e);
             }
         }
 
@@ -164,9 +172,7 @@ public class PrivilegeDefinition implements Serializable {
             return false;
         }
         if (path == null) {
-            if (other.path != null) {
-                return false;
-            }
+            return (other.path == null);
         }
         return path.equals(other.path);
     }

@@ -21,8 +21,6 @@
  */
 package org.esco.grouper.parsing;
 
-import edu.internet2.middleware.grouper.Stem;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -34,6 +32,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
+import edu.internet2.middleware.grouper.Stem;
+import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.esco.grouper.dao.GrouperDAO;
 import org.esco.grouper.domain.beans.EvaluableString;
@@ -45,8 +47,6 @@ import org.esco.grouper.domain.beans.PrivilegeDefinition;
 import org.esco.grouper.domain.beans.TemplateElement;
 import org.esco.grouper.exceptions.UnknownTemplateElementTempateElement;
 import org.esco.grouper.utils.GrouperSessionUtil;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -64,8 +64,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 28 juil. 08
  *
  */
-public class SGSParsingUtil extends org.xml.sax.helpers.DefaultHandler
-implements InitializingBean, EntityResolver {
+public class SGSParsingUtil extends org.xml.sax.helpers.DefaultHandler implements EntityResolver {
 
     /** Constant use to go up in the path. */
     private static final String UP_IN_PATH = "..:";
@@ -161,23 +160,23 @@ implements InitializingBean, EntityResolver {
     /**
      * Checks the data injection.
      * @throws Exception
-     * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
      */
+    @PostConstruct
     public void afterPropertiesSet() throws Exception {
 
-        Assert.notNull(this.grouperSessionUtil,
+        Validate.notNull(this.grouperSessionUtil,
                 "property grouperSessionUtil of class " + this.getClass().getName()
-                + " can not be null.");
+                        + " can not be null.");
 
-        Assert.notNull(this.grouperDAO,
+        Validate.notNull(this.grouperDAO,
                 "property grouperUtil of class " + this.getClass().getName()
                 + " can not be null.");
 
-        Assert.notNull(this.definitionsManager,
+        Validate.notNull(this.definitionsManager,
                 "property definitionManager of class " + this.getClass().getName()
                 + " can not be null.");
 
-        Assert.notNull(this.definitionsFileURI,
+        Validate.notNull(this.definitionsFileURI,
                 "property definitionsFileURI of class " + this.getClass().getName()
                 + " can not be null.");
     }

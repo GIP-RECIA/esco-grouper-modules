@@ -22,12 +22,14 @@
 package org.esco.grouper.services;
 
 
-import edu.internet2.middleware.grouper.GrouperSession;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
+import edu.internet2.middleware.grouper.GrouperSession;
+import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.esco.grouper.cache.SGSCache;
 import org.esco.grouper.dao.GrouperDAO;
@@ -39,8 +41,6 @@ import org.esco.grouper.domain.beans.PersonType;
 import org.esco.grouper.exceptions.EscoGrouperException;
 import org.esco.grouper.parsing.SGSParsingUtil;
 import org.esco.grouper.utils.GrouperSessionUtil;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
 
 
 
@@ -51,7 +51,7 @@ import org.springframework.util.Assert;
  * 11 August 08
  *
  */
-public class SarapisGroupServiceImpl implements ISarapisGroupService, InitializingBean {
+public class SarapisGroupServiceImpl implements ISarapisGroupService {
 
 	/** Logger. */
 	private static final Logger LOGGER = Logger.getLogger(SarapisGroupServiceImpl.class);
@@ -81,23 +81,23 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService, Initializi
 	/**
 	 * Checks the sping injections.
 	 * @throws Exception
-	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
+	@PostConstruct
 	public void afterPropertiesSet() throws Exception {
 
-		Assert.notNull(this.definitionsManager,
+		Validate.notNull(this.definitionsManager,
 				"property definitionManager of class " + this.getClass().getName()
-				+ " can not be null");
+						+ " can not be null");
 
-		Assert.notNull(this.grouperDAO,
+		Validate.notNull(this.grouperDAO,
 				"property grouperUtil of class " + this.getClass().getName()
-				+ " can not be null");
+						+ " can not be null");
 
-		Assert.notNull(this.grouperSessionUtil,
+		Validate.notNull(this.grouperSessionUtil,
 				"property grouperSessionUtil of class " + this.getClass().getName()
 				+ " can not be null");
 
-		Assert.notNull(this.parsingUtil,
+		Validate.notNull(this.parsingUtil,
 				"property parsingUtil of class " + this.getClass().getName()
 				+ " can not be null");
 
