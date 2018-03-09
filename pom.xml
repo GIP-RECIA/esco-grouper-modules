@@ -8,7 +8,7 @@
 	<description>Projet parent esco-grouper</description>
 	<modules>
 		<module>esco-grouper-commons</module>
-		<module>esco-grouper-portal-groupManager</module>
+		<!--<module>esco-grouper-portal-groupManager</module>-->
 		<module>esco-grouper-sarapis-alimManager</module>
 		<module>ldap-source-adapter</module>
 	</modules>
