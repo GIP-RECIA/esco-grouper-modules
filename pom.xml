@@ -6,7 +6,7 @@
 	<packaging>pom</packaging>
 	<name>esco-grouper-parent</name>
 	<description>Projet parent esco-grouper</description>
-	<inceptionYear>2013</inceptionYear>
+	<inceptionYear>2008</inceptionYear>
 
 	<scm>
 		<connection>scm:git:git://github.com/GIP-RECIA/esco-grouper-modules.git</connection>
