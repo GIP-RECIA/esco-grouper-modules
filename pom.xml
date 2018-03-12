@@ -47,6 +47,7 @@
 		<cobertura-maven-plugin.version>2.4</cobertura-maven-plugin.version>
 		<findbugs-maven-plugin.version>2.3.1</findbugs-maven-plugin.version>
 		<maven-war-plugin.version>2.1</maven-war-plugin.version>
+		<license.dir>${basedir}</license.dir>
 	</properties>
 
 	<repositories>
@@ -107,6 +108,20 @@
 				<directory>src/main/resources/properties/grouper</directory>
 				<filtering>true</filtering>
 			</resource>
+			<resource>
+				<directory>.</directory>
+				<includes>
+					<include>NOTICE</include>
+				</includes>
+				<targetPath>META-INF</targetPath>
+			</resource>
+			<resource>
+				<directory>${project.parent.relativePath}/..</directory>
+				<includes>
+					<include>LICENSE</include>
+				</includes>
+				<targetPath>META-INF</targetPath>
+			</resource>
 		</resources>
 		<plugins>
 			<plugin>
@@ -122,19 +137,32 @@
 					<includes>
 						<include>**/*.java</include>
 						<include>**/*.properties</include>
+						<include>**/*.xml</include>
 						<!-- <include>**/*.txt</include> -->
 						<!-- <include>**/*.sql</include> -->
 					</includes>
-					<!--<excludes>-->
-						<!--<exclude>src/main/webapp/rs/**</exclude>-->
-						<!--<exclude>src/test/resources/json/**</exclude>-->
-						<!--<exclude>src/main/webapp/js/jquery.dotdotdot.js</exclude>-->
-					<!--</excludes>-->
+					<excludes>
+						<exclude>**/pom.xml</exclude>
+						<exclude>etc/license-mappings.xml</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>
 						<goals>
 							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
 						</goals>
 					</execution>
 				</executions>
