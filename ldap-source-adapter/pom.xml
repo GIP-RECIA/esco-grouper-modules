@@ -12,23 +12,13 @@
   <dependencies>
     <dependency>
       <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-ext-jdk16</artifactId>
-      <version>1.45</version>
-    </dependency>
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
       <artifactId>bcprov-jdk16</artifactId>
-      <version>1.45</version>
+      <version>1.46</version>
     </dependency>
 	<dependency>
 	  <groupId>edu.vt.middleware</groupId>
 	  <artifactId>vt-ldap</artifactId>
-	  <version>3.3.3</version>
+	  <version>3.3.5</version>
 	</dependency>
-	<dependency>
-      <groupId>commons-pool</groupId>
-      <artifactId>commons-pool</artifactId>
-      <version>1.2</version>
-    </dependency>
   </dependencies>
 </project>

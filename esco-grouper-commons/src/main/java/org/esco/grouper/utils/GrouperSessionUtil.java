@@ -18,10 +18,10 @@
  */
 package org.esco.grouper.utils;
 
+import java.text.DateFormat;
+
 import edu.internet2.middleware.grouper.GrouperSession;
-import edu.internet2.middleware.grouper.SubjectFinder;
 import edu.internet2.middleware.grouper.exception.SessionException;
-import edu.internet2.middleware.subject.Subject;
 import edu.internet2.middleware.subject.SubjectNotFoundException;
 import edu.internet2.middleware.subject.SubjectNotUniqueException;
 import org.apache.log4j.Logger;
@@ -36,6 +36,9 @@ public class GrouperSessionUtil{
 
     /** Logger. */
     private static final Logger LOGGER = Logger.getLogger(GrouperSessionUtil.class);
+
+    private static final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG,
+                           DateFormat.LONG);
 
     /** Subject id used to open the sessions. */
     private String subjectId;
@@ -62,8 +65,7 @@ public class GrouperSessionUtil{
     public GrouperSession createSession() {
 
         try {
-            final Subject subject = SubjectFinder.findById(subjectId, false);
-            final GrouperSession session = GrouperSession.start(subject);
+            final GrouperSession session = GrouperSession.startBySubjectIdAndSource(subjectId, null);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Starting a new session: " + session.getSessionId());
             }
@@ -87,7 +89,9 @@ public class GrouperSessionUtil{
      */
     public void stopSession(final GrouperSession session) {
         try {
-            LOGGER.debug("Stopping the session : " + session.getSessionId());
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Stopping the session : " + session.getSessionId() + ", that were started at :" + df.format(session.getStartTime()));
+            }
             session.stop();
         } catch (SessionException e) {
             LOGGER.error(e, e);
