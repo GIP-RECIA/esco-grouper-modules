@@ -529,8 +529,7 @@
                                  description="Racine pour les groupes locaux de l'établissement %NOM_ETAB%"
                                  create="true">
                    <privileges>             
-                      <privilege right="GROUP_CREATION" path="esco:admin:local:admin_%NOM_ETAB%_%UAI_ETAB%" recursive="false"/>
-                      <privilege right="FOLDER_CREATION" path="esco:admin:local:admin_%NOM_ETAB%_%UAI_ETAB%" recursive="false"/>
+                      <privilege right="CREATE" path="esco:admin:local:admin_%NOM_ETAB%_%UAI_ETAB%" recursive="false"/>
                    </privileges>
                 </folder-template>
                 

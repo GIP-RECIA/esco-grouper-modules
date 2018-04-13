@@ -42,10 +42,10 @@ public class PrivilegeDefinition implements Serializable {
         UPDATE,
 
         /** Creation of folder.*/
-        FOLDER_CREATION,
+        //FOLDER_CREATION,
 
-        /** Creation of Group. */
-        GROUP_CREATION,
+        /** Creation of Group and Folder. */
+        CREATE,
 
         /** View privilege.*/
         VIEW,
@@ -78,8 +78,7 @@ public class PrivilegeDefinition implements Serializable {
                         + Right.UPDATE + ", "
                         + Right.VIEW + ", "
                         + Right.READ + ", "
-                        + Right.FOLDER_CREATION + ", "
-                        + Right.GROUP_CREATION + ", "
+                        + Right.CREATE + ","
                         + Right.FOLDER_ADMIN + ", "
                         + Right.FOLDER_ATTR_UPDATE + ", "
                         + Right.FOLDER_ATTR_READ + ".", e);

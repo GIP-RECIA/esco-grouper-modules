@@ -129,10 +129,7 @@ public class GrouperDAO {
                         if (Right.ADMIN.equals(privDef.getPrivilege())) {
                             addAdminPrivilege(definition.getPath(), privilegedGroupDef.getPath(), folder, subj);
                         }
-                        if (Right.FOLDER_CREATION.equals(privDef.getPrivilege())) {
-                            addStemPrivilege(definition.getPath(), privilegedGroupDef.getPath(), folder, subj);
-                        }
-                        if (Right.GROUP_CREATION.equals(privDef.getPrivilege())) {
+                        if (Right.CREATE.equals(privDef.getPrivilege())) {
                             addCreatePrivilege(definition.getPath(), privilegedGroupDef.getPath(), folder, subj);
                         }
                         if (Right.FOLDER_ADMIN.equals(privDef.getPrivilege())) {
