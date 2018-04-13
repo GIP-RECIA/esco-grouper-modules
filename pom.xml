@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.esco.grouper</groupId>
 	<artifactId>esco-grouper-parent</artifactId>
-	<version>0.0.6-grouper-2.3.0</version>
+	<version>0.0.7-grouper-2.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>esco-grouper-parent</name>
 	<description>Projet parent esco-grouper</description>
@@ -12,7 +12,7 @@
 		<connection>scm:git:git://github.com/GIP-RECIA/esco-grouper-modules.git</connection>
 		<developerConnection>scm:git:git@github.com:GIP-RECIA/esco-grouper-modules.git</developerConnection>
 		<url>https://github.com/GIP-RECIA/esco-grouper-modules.git</url>
-  	  <tag>esco-grouper-parent-0.0.6-grouper-2.3.0</tag>
+  	  <tag>HEAD</tag>
   </scm>
 	<distributionManagement>
 		<repository>
