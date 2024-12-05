@@ -41,7 +41,7 @@
 
 		<grouper.version>2.3.0</grouper.version>
 		<spring.version>2.5.5</spring.version>
-		<mysql.version>5.1.45</mysql.version>
+		<mysql.version>8.0.28</mysql.version>
 
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 
@@ -105,7 +105,7 @@
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
-				<version>4.8.1</version>
+				<version>4.13.1</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
