@@ -557,6 +557,58 @@ public class GrouperDAO {
 	}
 
 	/**
+	 * Creates or retrieves the group aggregating one dynamic tree level.
+	 * @param session The Grouper session.
+	 * @param folder The folder that contains the aggregation group.
+	 * @param component The current dynamic tree component.
+	 * @param definition The dynamic tree definition.
+	 * @param values The values used to evaluate templates.
+	 * @return The aggregation group.
+	 */
+	private Group retrieveOrCreateAggregateGroup(final GrouperSession session,
+			final Stem folder,
+			final String component,
+			final String displayComponent,
+			final GroupOrFolderDefinition definition,
+			final String... values) throws GroupAddException, GroupModifyException {
+		final String groupExtension = definition.getAggregateGroupPrefix() + component;
+		final String groupDisplayExtension = definition.getAggregateGroupPrefix() + displayComponent;
+		final String groupName = folder.getName() + Stem.DELIM + groupExtension;
+		Group group;
+		try {
+			group = GroupFinder.findByName(session, groupName, true);
+		} catch (GroupNotFoundException e) {
+			group = folder.addChildGroup(groupExtension, groupDisplayExtension);
+			group.setDescription(definition.getDescription());
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info(">>> Dynamic tree aggregate group " + groupName + " created.");
+			}
+		}
+
+		handlePrivilegesForGroup(session, new GroupOrStem(group), definition, values);
+		return group;
+	}
+
+	/**
+	 * Makes one group a direct member of another group when not already linked.
+	 * @param memberGroup The group to add.
+	 * @param containingGroup The aggregate group.
+	 * @throws InsufficientPrivilegeException If the session cannot add the membership.
+	 * @throws MemberAddException If Grouper cannot create the membership.
+	 */
+	private void addGroupToAggregate(final Group memberGroup, final Group containingGroup)
+			throws InsufficientPrivilegeException, MemberAddException {
+		final Subject subject = memberGroup.toSubject();
+		if (!containingGroup.hasImmediateMember(subject)) {
+			containingGroup.addMember(subject);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Adding dynamic tree group " + memberGroup.getName()
+						+ " to aggregate group " + containingGroup.getName() + ".");
+			}
+		}
+	}
+
+	/**
 	 * Creates the folders represented by a dynamic tree and its terminal group.
 	 * @param session The Grouper session.
 	 * @param definition The evaluated dynamic tree definition.
@@ -576,31 +628,43 @@ public class GrouperDAO {
 			handlePrivilegesForFolder(session, containingFolderWrapper, containingDef, values);
 			Stem containingFolder = containingFolderWrapper.asStem();
 			final List<String> components = definition.getTreeComponents();
+			final List<String> displayComponents = definition.getTreeDisplayComponents();
+			Group parentAggregateGroup = null;
 
 			for (int index = 0; index < components.size() - 1; index++) {
 				final String component = components.get(index);
+				final String displayComponent = displayComponents.get(index);
 				final String folderName = containingFolder.getName() + Stem.DELIM + component;
 				Stem folder;
 				try {
 					folder = StemFinder.findByName(session, folderName, true);
 				} catch (StemNotFoundException e) {
-					folder = containingFolder.addChildStem(component, component);
+					folder = containingFolder.addChildStem(component, displayComponent);
 					folder.setDescription(definition.getDescription());
 					if (LOGGER.isInfoEnabled()) {
 						LOGGER.info(">>> Dynamic tree folder " + folderName + " created.");
 					}
 				}
 				handlePrivilegesForFolder(session, new GroupOrStem(folder), definition, values);
+				if (definition.getAggregateGroupPrefix() != null) {
+					final Group aggregateGroup = retrieveOrCreateAggregateGroup(session, folder,
+							component, displayComponent, definition, values);
+					if (parentAggregateGroup != null) {
+						addGroupToAggregate(aggregateGroup, parentAggregateGroup);
+					}
+					parentAggregateGroup = aggregateGroup;
+				}
 				containingFolder = folder;
 			}
 
 			final String groupExtension = components.get(components.size() - 1);
+			final String groupDisplayExtension = displayComponents.get(displayComponents.size() - 1);
 			final String groupName = containingFolder.getName() + Stem.DELIM + groupExtension;
 			Group group;
 			try {
 				group = GroupFinder.findByName(session, groupName, true);
 			} catch (GroupNotFoundException e) {
-				group = containingFolder.addChildGroup(groupExtension, groupExtension);
+				group = containingFolder.addChildGroup(groupExtension, groupDisplayExtension);
 				group.setDescription(definition.getDescription());
 				if (LOGGER.isInfoEnabled()) {
 					LOGGER.info(">>> Dynamic tree group " + groupName + " created.");
@@ -610,8 +674,12 @@ public class GrouperDAO {
 			final GroupOrStem groupWrapper = new GroupOrStem(group);
 			handlePrivilegesForGroup(session, groupWrapper, definition, values);
 			handleMembershipsForGroup(session, groupWrapper, definition, values);
+			if (parentAggregateGroup != null) {
+				addGroupToAggregate(group, parentAggregateGroup);
+			}
 			return groupWrapper;
-		} catch (StemAddException | StemModifyException | GroupAddException | GroupModifyException e) {
+		} catch (StemAddException | StemModifyException | GroupAddException | GroupModifyException
+				| InsufficientPrivilegeException | MemberAddException e) {
 			LOGGER.fatal(e, e);
 			throw new EscoGrouperException(e);
 		} catch (RuntimeException e) {

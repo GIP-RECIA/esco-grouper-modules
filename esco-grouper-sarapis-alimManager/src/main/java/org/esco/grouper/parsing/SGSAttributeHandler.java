@@ -84,6 +84,9 @@ public class SGSAttributeHandler implements Serializable {
 	/** char separator for treeGroups. */
 	public static final String TREE_CHAR_SEPARATOR = "tree-char-separator";
 
+	/** Prefix for aggregation groups in a dynamic tree. */
+	public static final String AGGREGATE_GROUP_PREFIX_ATTR = "aggregate-group-prefix";
+
 	/** Serial version UID.*/
 	private static final long serialVersionUID = 8391732649319550004L;
 
@@ -136,6 +139,9 @@ public class SGSAttributeHandler implements Serializable {
 	private Pattern conditionGroupExt;
 
 	private String treeCharSeparator = "/";
+
+	/** Prefix for aggregation groups in a dynamic tree. */
+	private String aggregateGroupPrefix;
 
 	/**
 	 * Builds an instance of SGSAttributeHandler.
@@ -226,6 +232,12 @@ public class SGSAttributeHandler implements Serializable {
 			conditionGroupExt = Pattern.compile(attributeValue.trim());
 		} else if (TREE_CHAR_SEPARATOR.equals(trimedAttrName)) {
 			treeCharSeparator = attributeValue.trim();
+		} else if (AGGREGATE_GROUP_PREFIX_ATTR.equals(trimedAttrName)) {
+			aggregateGroupPrefix = attributeValue.trim();
+			if (aggregateGroupPrefix.isEmpty()) {
+				throw new SAXParseException("The attribute " + AGGREGATE_GROUP_PREFIX_ATTR
+						+ " can't be empty.", locator);
+			}
 		}
 	}
 
@@ -245,6 +257,7 @@ public class SGSAttributeHandler implements Serializable {
 		distributionBy = null;
 		conditionGroupExt = null;
 		treeCharSeparator = "/";
+		aggregateGroupPrefix = null;
 	}
 
 	/**
@@ -394,6 +407,13 @@ public class SGSAttributeHandler implements Serializable {
 	 */
 	public String getTreeCharSeparator() {
 		return treeCharSeparator;
+	}
+
+	/**
+	 * @return the aggregateGroupPrefix
+	 */
+	public String getAggregateGroupPrefix() {
+		return aggregateGroupPrefix;
 	}
 
 }

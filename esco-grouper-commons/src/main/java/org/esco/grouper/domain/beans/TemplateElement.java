@@ -256,8 +256,13 @@ public class TemplateElement {
     public static String evaluate(final int testedMask, final String src,
             final String...values) {
         String evaluated = src;
-        for (int i = 0; i < Math.min(availableTemplateElements.size(), values.length); i++) {
-            evaluated = availableTemplateElements.get(i).evaluate(testedMask, evaluated, values[i]);
+        for (int i = 0; i < availableTemplateElements.size(); i++) {
+            final TemplateElement templateElement = availableTemplateElements.get(i);
+            if (i < values.length) {
+                evaluated = templateElement.evaluate(testedMask, evaluated, values[i]);
+            } else if (templateElement.hasDefaultValue()) {
+                evaluated = templateElement.evaluate(testedMask, evaluated, "");
+            }
         }
         return evaluated;
     }

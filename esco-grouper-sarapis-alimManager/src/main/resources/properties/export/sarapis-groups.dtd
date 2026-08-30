@@ -65,7 +65,8 @@
 	extension CDATA #REQUIRED
 	display-extension CDATA #REQUIRED
 	description CDATA #REQUIRED
-	tree-char-separator CDATA #IMPLIED>
+	tree-char-separator CDATA #IMPLIED
+	aggregate-group-prefix CDATA #IMPLIED>
 
 <!ATTLIST privilege
 	right CDATA #REQUIRED
@@ -79,4 +80,3 @@
 <!ATTLIST members
 	type CDATA #REQUIRED
 	distribution-by CDATA #IMPLIED>
-

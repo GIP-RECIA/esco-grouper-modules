@@ -56,7 +56,10 @@ public class GroupOrFolderDefinition implements Serializable, Cloneable {
 	private EvaluableString displayExtension;
 
 	/** The char to use for splitting the tree group. */
-	private String treeCharSeparator;
+	private EvaluableString treeCharSeparator;
+
+	/** Prefix for aggregation groups created at each dynamic tree level. */
+	private String aggregateGroupPrefix;
 
 	/** The containing path of the folder or group. */
 	private ReversibleEvaluableString containingPath;
@@ -96,6 +99,7 @@ public class GroupOrFolderDefinition implements Serializable, Cloneable {
 	 * @param extension The extension of the group or folder.
 	 * @param displayExtension The display extension of the group or folder.
 	 * @param description The description of the group or folder.
+	 * @param aggregateGroupPrefix Prefix for aggregation groups in a dynamic tree.
 	 * @throws UnknownTemplateElementTempateElement If there is a template element in a string
 	 * which is unknown.
 	 */
@@ -106,7 +110,8 @@ public class GroupOrFolderDefinition implements Serializable, Cloneable {
 			final String extension,
 			final String displayExtension,
 			final String description,
-			final String treeCharSeparator) throws UnknownTemplateElementTempateElement {
+			final String treeCharSeparator,
+			final String aggregateGroupPrefix) throws UnknownTemplateElementTempateElement {
 		this.type = type;
 		this.preexisting = preexisting;
 		this.create = create;
@@ -114,7 +119,8 @@ public class GroupOrFolderDefinition implements Serializable, Cloneable {
 		this.extension = new EvaluableString(extension);
 		this.displayExtension = new EvaluableString(displayExtension);
 		this.description = new EvaluableString(description);
-		this.treeCharSeparator = treeCharSeparator;
+		this.treeCharSeparator = new EvaluableString(treeCharSeparator);
+		this.aggregateGroupPrefix = aggregateGroupPrefix;
 		if (TemplateType.TREEGROUP.equals(type)) {
 			this.preexisting = false;
 		}
@@ -137,7 +143,8 @@ public class GroupOrFolderDefinition implements Serializable, Cloneable {
 
 		GroupOrFolderDefinition gofd = new GroupOrFolderDefinition();
 		gofd.type = type;
-		gofd.treeCharSeparator = treeCharSeparator;
+		gofd.treeCharSeparator = treeCharSeparator.evaluate(values);
+		gofd.aggregateGroupPrefix = aggregateGroupPrefix;
 		gofd.preexisting = preexisting;
 		gofd.containingPath = newContainingPath;
 		gofd.extension = newExtension;
@@ -158,13 +165,35 @@ public class GroupOrFolderDefinition implements Serializable, Cloneable {
 			throw new IllegalStateException("The definition is not a dynamic tree.");
 		}
 
-		final String[] values = extension.getString().split(Pattern.quote(treeCharSeparator), -1);
+		return splitTreeValue(extension.getString());
+	}
+
+	/**
+	 * Splits the evaluated display extension into its dynamic tree components.
+	 * @return The display components matching the tree path components.
+	 */
+	public List<String> getTreeDisplayComponents() {
+		final List<String> components = splitTreeValue(displayExtension.getString());
+		if (components.size() != getTreeComponents().size()) {
+			throw new IllegalArgumentException("The dynamic tree display extension must have the same number "
+					+ "of components as its extension.");
+		}
+		return components;
+	}
+
+	/**
+	 * Splits a dynamic tree value with its evaluated separator.
+	 * @param value The path or display path to split.
+	 * @return The non-empty components.
+	 */
+	private List<String> splitTreeValue(final String value) {
+		final String[] values = value.split(Pattern.quote(treeCharSeparator.getString()), -1);
 		final List<String> components = new ArrayList<>(values.length);
-		for (String value : values) {
-			final String component = value.trim();
+		for (String treeValue : values) {
+			final String component = treeValue.trim();
 			if (component.isEmpty()) {
 				throw new IllegalArgumentException("The dynamic tree path contains an empty component: "
-						+ extension.getString());
+						+ value);
 			}
 			components.add(component);
 		}
@@ -249,6 +278,9 @@ public class GroupOrFolderDefinition implements Serializable, Cloneable {
 		if (!containingPath.isEvaluated()) {
 			return true;
 		}
+		if (TemplateType.TREEGROUP.equals(type) && !treeCharSeparator.isEvaluated()) {
+			return true;
+		}
 		if (isRoot()) {
 			return false;
 		}
@@ -326,7 +358,15 @@ public class GroupOrFolderDefinition implements Serializable, Cloneable {
 	 * @return the treeCharSeparator
 	 */
 	public final String getTreeCharSeparator() {
-		return treeCharSeparator;
+		return treeCharSeparator.getString();
+	}
+
+	/**
+	 * Gives the prefix for groups aggregating a dynamic tree branch.
+	 * @return The aggregation group prefix, or null when aggregation is disabled.
+	 */
+	public String getAggregateGroupPrefix() {
+		return aggregateGroupPrefix;
 	}
 
 	/**

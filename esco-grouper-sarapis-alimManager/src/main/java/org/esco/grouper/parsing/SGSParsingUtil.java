@@ -534,7 +534,8 @@ public class SGSParsingUtil extends org.xml.sax.helpers.DefaultHandler implement
 				attributeHandler.getExtension(),
 				attributeHandler.getDisplayExtension(),
 				attributeHandler.getDescription(),
-				attributeHandler.getTreeCharSeparator());
+				attributeHandler.getTreeCharSeparator(),
+				attributeHandler.getAggregateGroupPrefix());
 
 		// Adds the recursive administrating path if needed.
 		for (PrivilegeDefinition recPrivilege : recPrivileges) {

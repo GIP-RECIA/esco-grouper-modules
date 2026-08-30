@@ -42,6 +42,7 @@
         <template-element key="%ENSEIGNEMENT%"/>
         <template-element key="%ADMIN_FONCTION%" default-value="Autre"/>
         <template-element key="%SERVICE%" />
+        <template-element key="%SERVICE_SEPARATOR%" default-value="/"/>
     </ordered-template-elements>
 
     <folder extension="esco"
@@ -598,7 +599,9 @@
                        description="Personnel TOS de l'établissement">
 					<dynamic-tree-template extension="%SERVICE%"
 						display-extension="%SERVICE%"
-						description="Personnel TOS - fonction %SERVICE%">
+						description="Personnel TOS - fonction %SERVICE%"
+						aggregate-group-prefix="Tous_"
+						tree-char-separator="%SERVICE_SEPARATOR%">
 							<members type="TOS" distribution-by="%SERVICE%" />
 					   </dynamic-tree-template>
                 </folder-template>

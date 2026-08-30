@@ -41,3 +41,15 @@ Validate at least these cases:
 
 Check privileges and memberships on the terminal group, and folder privileges
 on each created intermediate folder when the configuration requires them.
+
+## Aggregation groups
+
+When `aggregate-group-prefix` is configured, create an aggregate group in
+each intermediate folder. Nest the child aggregate group into its parent
+aggregate group, then nest the terminal group into the deepest aggregate.
+For `DSI/Support/N1` and prefix `Tous_`, `N1` is a member of
+`Tous_Support`, which is a member of `Tous_DSI`.
+
+The tree extension, display extension and separator are evaluated templates.
+They must use the project's `%NAME%` placeholder syntax and the extension and
+display extension must resolve to the same number of components.
