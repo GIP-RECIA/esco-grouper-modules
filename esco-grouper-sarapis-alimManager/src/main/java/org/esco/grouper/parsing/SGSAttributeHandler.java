@@ -28,7 +28,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXParseException;
 
-
 /**
  * Atribute handler for the Sarapis Group Service (SGS).
  * @author GIP RECIA - A. Deman
@@ -37,342 +36,350 @@ import org.xml.sax.SAXParseException;
  */
 public class SGSAttributeHandler implements Serializable {
 
-    /** UID attribute. */
-    public static final String UID_ATTR = "uid";
+	/** UID attribute. */
+	public static final String UID_ATTR = "uid";
 
-    /** Extension attribute. */
-    public static final String EXT_ATTR = "extension";
+	/** Extension attribute. */
+	public static final String EXT_ATTR = "extension";
 
-    /** Display extension attribute. */
-    public static final String DISP_EXT_ATTR = "display-extension";
+	/** Display extension attribute. */
+	public static final String DISP_EXT_ATTR = "display-extension";
 
-    /** Description attribute. */
-    public static final String DESC_ATTR = "description";
+	/** Description attribute. */
+	public static final String DESC_ATTR = "description";
 
-    /** Preexisting attribute. */
-    public static final String PREEXIST_ATTR = "preexisting";
+	/** Preexisting attribute. */
+	public static final String PREEXIST_ATTR = "preexisting";
 
-    /** Create attribute. */
-    public static final String CREATE_ATTR = "create";
+	/** Create attribute. */
+	public static final String CREATE_ATTR = "create";
 
-    /** Path attribute. */
-    public static final String PATH_ATTR = "path";
+	/** Path attribute. */
+	public static final String PATH_ATTR = "path";
 
-    /** Right attribute. */
-    public static final String RIGHT_ATTR = "right";
+	/** Right attribute. */
+	public static final String RIGHT_ATTR = "right";
 
-    /** Recursive attribute. */
-    public static final String RECURS_ATTR = "recursive";
+	/** Recursive attribute. */
+	public static final String RECURS_ATTR = "recursive";
 
-    /** Type attribute. */
-    public static final String TYPE_ATTR = "type";
+	/** Type attribute. */
+	public static final String TYPE_ATTR = "type";
 
-    /** Distribution by attribute. */
-    public static final String DISTRIB_BY_ATTR = "distribution-by";
+	/** Distribution by attribute. */
+	public static final String DISTRIB_BY_ATTR = "distribution-by";
 
-    /** Key attribute. */
-    public static final String KEY_ATTR = "key";
+	/** Key attribute. */
+	public static final String KEY_ATTR = "key";
 
-    /** Default value attribute. */
-    public static final String DEF_VAL_ATTR = "default-value";
+	/** Default value attribute. */
+	public static final String DEF_VAL_ATTR = "default-value";
 
-    /** value attribute. */
-    public static final String VALUE_ATTR = "value";
+	/** value attribute. */
+	public static final String VALUE_ATTR = "value";
 
-    /** Condition Attribute. */
-    public static final String CONDITION_GROUP_EXT_ATTR = "condition-group-ext";
+	/** Condition Attribute. */
+	public static final String CONDITION_GROUP_EXT_ATTR = "condition-group-ext";
 
-    /** Serial version UID.*/
-    private static final long serialVersionUID = 8391732649319550004L;
+	/** char separator for treeGroups. */
+	public static final String TREE_CHAR_SEPARATOR = "tree-char-separator";
 
-    /** Logger.*/
-    private static final Logger LOGGER = Logger.getLogger(SGSAttributeHandler.class);
+	/** Serial version UID.*/
+	private static final long serialVersionUID = 8391732649319550004L;
 
-    /** UID value. */
-    private String uid;
+	/** Logger.*/
+	private static final Logger LOGGER = Logger.getLogger(SGSAttributeHandler.class);
 
-    /** Extension value. */
-    private String extension;
+	/** UID value. */
+	private String uid;
 
-    /** Display extension value. */
-    private String displayExtension;
+	/** Extension value. */
+	private String extension;
 
-    /** Description value. */
-    private String description;
+	/** Display extension value. */
+	private String displayExtension;
 
-    /** Preexisting value. */
-    private Boolean preexisting;
+	/** Description value. */
+	private String description;
 
-    /** Create value. */
-    private Boolean create;
+	/** Preexisting value. */
+	private Boolean preexisting;
 
-    /** Path value. */
-    private String path;
+	/** Create value. */
+	private Boolean create;
 
-    /** Right value. */
-    private String right;
+	/** Path value. */
+	private String path;
 
-    /** Recursive value. */
-    private Boolean recursive;
+	/** Right value. */
+	private String right;
 
-    /** Type value. */
-    private PersonType type;
+	/** Recursive value. */
+	private Boolean recursive;
 
-    /** Distribution by value. */
-    private String distributionBy;
+	/** Type value. */
+	private PersonType type;
 
-    /** Key for a template element. */
-    private String key;
+	/** Distribution by value. */
+	private String distributionBy;
 
-    /** Key for a defaultValue element. */
-    private String defaultValue;
+	/** Key for a template element. */
+	private String key;
 
-    /** value attribute. */
-    private Boolean value;
+	/** Key for a defaultValue element. */
+	private String defaultValue;
 
-    /** Condition value on group extension. */
-    private Pattern conditionGroupExt;
+	/** value attribute. */
+	private Boolean value;
 
-    /**
-     * Builds an instance of SGSAttributeHandler.
-     */
-    public SGSAttributeHandler() {
-        LOGGER.debug("Creation of an instance of " + getClass().getSimpleName() + ".");
-    }
+	/** Condition value on group extension. */
+	private Pattern conditionGroupExt;
 
-    /**
-     * handles attributes.
-     * @param locator The locator.
-     * @param attributs The attributs to handle.
-     * @throws SAXParseException If one of the  parsed value is not valid.
-     */
-    public void handleAttributes(final Locator locator,
-            final Attributes attributs) throws SAXParseException {
+	private String treeCharSeparator = "/";
 
-        for (int index = 0; index < attributs.getLength(); index++) {
-            handleAttribute(locator,
-                    attributs.getLocalName(index),
-                    attributs.getValue(index));
-        }
-    }
+	/**
+	 * Builds an instance of SGSAttributeHandler.
+	 */
+	public SGSAttributeHandler() {
+		LOGGER.debug("Creation of an instance of " + getClass().getSimpleName() + ".");
+	}
 
-    /**
-     * Handles an attribute.
-     * @param locator The current locator in the xml file.
-     * @param attributeName The name of the attribute to handle.
-     * @param attributeValue The value of the attribute to handle.
-     * @throws SAXParseException If the value of the attribute has to be parse and is
-     * not valid.
-     */
-    public void handleAttribute(final Locator locator,
-            final String attributeName,
-            final String attributeValue) throws SAXParseException {
+	/**
+	 * handles attributes.
+	 * @param locator The locator.
+	 * @param attributs The attributs to handle.
+	 * @throws SAXParseException If one of the  parsed value is not valid.
+	 */
+	public void handleAttributes(final Locator locator,
+			final Attributes attributs) throws SAXParseException {
 
-        final String trimedAttrName = attributeName.trim();
+		for (int index = 0; index < attributs.getLength(); index++) {
+			handleAttribute(locator,
+					attributs.getLocalName(index),
+					attributs.getValue(index));
+		}
+	}
 
+	/**
+	 * Handles an attribute.
+	 * @param locator The current locator in the xml file.
+	 * @param attributeName The name of the attribute to handle.
+	 * @param attributeValue The value of the attribute to handle.
+	 * @throws SAXParseException If the value of the attribute has to be parse and is
+	 * not valid.
+	 */
+	public void handleAttribute(final Locator locator,
+			final String attributeName,
+			final String attributeValue) throws SAXParseException {
 
-        if (UID_ATTR.equals(trimedAttrName)) {
-            uid = attributeValue.trim();
-        } else if (EXT_ATTR.equals(trimedAttrName)) {
-            extension = attributeValue.trim();
-        } else if (DISP_EXT_ATTR.equals(trimedAttrName)) {
-            displayExtension = attributeValue.trim();
-        } else if (DESC_ATTR.equals(trimedAttrName)) {
-            description = attributeValue.trim();
-        } else if (VALUE_ATTR.equals(trimedAttrName)) {
-           value = parseBoolean(locator, trimedAttrName, attributeValue);
-        } else if (PREEXIST_ATTR.equals(trimedAttrName)) {
-            preexisting = parseBoolean(locator, trimedAttrName, attributeValue);
-            // Checks that the create and preexisting attribut are not true together.
-            if (preexisting && create) {
-                throw new SAXParseException("The attribute " + PREEXIST_ATTR + " and " + CREATE_ATTR
-                        + " can't be true at the same time.", locator);
-            }
+		final String trimedAttrName = attributeName.trim();
 
-        } else if (CREATE_ATTR.equals(trimedAttrName)) {
-            create = parseBoolean(locator, trimedAttrName, attributeValue);
-            // Checks that the create and preexisting attribut are not true together.
-            if (preexisting && create) {
-                throw new SAXParseException("The attribute " + PREEXIST_ATTR + " and " + CREATE_ATTR
-                        + " can't be true at the same time.", locator);
-            }
-        } else if (PATH_ATTR.equals(trimedAttrName)) {
-            path = attributeValue.trim();
-        } else if (RIGHT_ATTR.equals(trimedAttrName)) {
-            right = attributeValue.trim();
-        } else if (RECURS_ATTR.equals(trimedAttrName)) {
-            recursive = parseBoolean(locator, trimedAttrName, attributeValue);
-        } else if (TYPE_ATTR.equals(trimedAttrName)) {
-            type = PersonType.parseIgnoreCase(attributeValue);
-            if (type == null) {
-                throw new SAXParseException("Illegal value for atribute "
-                        + attributeName + " legal values are : "
-                        + Arrays.toString(PersonType.values())
-                        + " found : " + attributeValue + ".", locator);
-            }
-        } else if (DISTRIB_BY_ATTR.equals(trimedAttrName)) {
-            distributionBy = attributeValue.trim();
-        } else if (KEY_ATTR.equals(trimedAttrName)) {
-            key = attributeValue.trim();
-        } else if (DEF_VAL_ATTR.equals(trimedAttrName)) {
-            defaultValue = attributeValue.trim();
-        } else if (CONDITION_GROUP_EXT_ATTR.equals(trimedAttrName)) {
-        	if ("".equals(attributeValue.trim())) {
-        		throw new SAXParseException("The attribute " + CONDITION_GROUP_EXT_ATTR + " is facultative but can't be empty.", locator);
-        	}
-            conditionGroupExt = Pattern.compile(attributeValue.trim());
-        }
-    }
+		if (UID_ATTR.equals(trimedAttrName)) {
+			uid = attributeValue.trim();
+		} else if (EXT_ATTR.equals(trimedAttrName)) {
+			extension = attributeValue.trim();
+		} else if (DISP_EXT_ATTR.equals(trimedAttrName)) {
+			displayExtension = attributeValue.trim();
+		} else if (DESC_ATTR.equals(trimedAttrName)) {
+			description = attributeValue.trim();
+		} else if (VALUE_ATTR.equals(trimedAttrName)) {
+			value = parseBoolean(locator, trimedAttrName, attributeValue);
+		} else if (PREEXIST_ATTR.equals(trimedAttrName)) {
+			preexisting = parseBoolean(locator, trimedAttrName, attributeValue);
+			// Checks that the create and preexisting attribut are not true together.
+			if (preexisting && create) {
+				throw new SAXParseException("The attribute " + PREEXIST_ATTR + " and " + CREATE_ATTR
+						+ " can't be true at the same time.", locator);
+			}
 
-    /**
-     * Resets the handler.
-     */
-    public void reset() {
-        extension = null;
-        displayExtension = null;
-        description = null;
-        preexisting = false;
-        create = false;
-        path = null;
-        recursive = false;
-        type = null;
-        right = null;
-        distributionBy = null;
-        conditionGroupExt = null;
-    }
+		} else if (CREATE_ATTR.equals(trimedAttrName)) {
+			create = parseBoolean(locator, trimedAttrName, attributeValue);
+			// Checks that the create and preexisting attribut are not true together.
+			if (preexisting && create) {
+				throw new SAXParseException("The attribute " + PREEXIST_ATTR + " and " + CREATE_ATTR
+						+ " can't be true at the same time.", locator);
+			}
+		} else if (PATH_ATTR.equals(trimedAttrName)) {
+			path = attributeValue.trim();
+		} else if (RIGHT_ATTR.equals(trimedAttrName)) {
+			right = attributeValue.trim();
+		} else if (RECURS_ATTR.equals(trimedAttrName)) {
+			recursive = parseBoolean(locator, trimedAttrName, attributeValue);
+		} else if (TYPE_ATTR.equals(trimedAttrName)) {
+			type = PersonType.parseIgnoreCase(attributeValue);
+			if (type == null) {
+				throw new SAXParseException("Illegal value for atribute "
+						+ attributeName + " legal values are : "
+						+ Arrays.toString(PersonType.values())
+						+ " found : " + attributeValue + ".", locator);
+			}
+		} else if (DISTRIB_BY_ATTR.equals(trimedAttrName)) {
+			distributionBy = attributeValue.trim();
+		} else if (KEY_ATTR.equals(trimedAttrName)) {
+			key = attributeValue.trim();
+		} else if (DEF_VAL_ATTR.equals(trimedAttrName)) {
+			defaultValue = attributeValue.trim();
+		} else if (CONDITION_GROUP_EXT_ATTR.equals(trimedAttrName)) {
+			if ("".equals(attributeValue.trim())) {
+				throw new SAXParseException("The attribute " + CONDITION_GROUP_EXT_ATTR + " is facultative but can't be empty.", locator);
+			}
+			conditionGroupExt = Pattern.compile(attributeValue.trim());
+		} else if (TREE_CHAR_SEPARATOR.equals(trimedAttrName)) {
+			treeCharSeparator = attributeValue.trim();
+		}
+	}
 
-    /**
-     * Parse a boolean attribute.
-     * @param locator The locator for the parsed file..
-     * @param attribute The attribute to parse.
-     * @param valueStr The value to parse.
-     * @return True of false.
-     * @throws SAXParseException If the value is not true or false (case insensitive).
-     */
-    protected boolean parseBoolean(final Locator locator,
-            final String attribute,
-            final String valueStr) throws SAXParseException {
-        final String trimedValue = valueStr.trim();
-        if (trimedValue.equalsIgnoreCase("true")) {
-            return true;
-        } else if (trimedValue.equalsIgnoreCase("false")) {
-            return false;
-        }
-        throw new SAXParseException("Illegal value for boolean atribute "
-                + attribute + " (should be true or false): " + valueStr + ".", locator);
+	/**
+	 * Resets the handler.
+	 */
+	public void reset() {
+		extension = null;
+		displayExtension = null;
+		description = null;
+		preexisting = false;
+		create = false;
+		path = null;
+		recursive = false;
+		type = null;
+		right = null;
+		distributionBy = null;
+		conditionGroupExt = null;
+		treeCharSeparator = "/";
+	}
 
-    }
-    /**
-     * Getter for extension.
-     * @return extension.
-     */
-    public String getExtension() {
-        return extension;
-    }
+	/**
+	 * Parse a boolean attribute.
+	 * @param locator The locator for the parsed file..
+	 * @param attribute The attribute to parse.
+	 * @param valueStr The value to parse.
+	 * @return True of false.
+	 * @throws SAXParseException If the value is not true or false (case insensitive).
+	 */
+	protected boolean parseBoolean(final Locator locator,
+			final String attribute,
+			final String valueStr) throws SAXParseException {
+		final String trimedValue = valueStr.trim();
+		if ("true".equalsIgnoreCase(trimedValue)) {
+			return true;
+		} else if ("false".equalsIgnoreCase(trimedValue)) {
+			return false;
+		}
+		throw new SAXParseException("Illegal value for boolean atribute "
+				+ attribute + " (should be true or false): " + valueStr + ".", locator);
 
-    /**
-     * Getter for displayExtension.
-     * @return displayExtension.
-     */
-    public String getDisplayExtension() {
-        return displayExtension;
-    }
+	}
 
-    /**
-     * Getter for description.
-     * @return description.
-     */
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * Getter for extension.
+	 * @return extension.
+	 */
+	public String getExtension() {
+		return extension;
+	}
 
-    /**
-     * Getter for preexisting.
-     * @return preexisting.
-     */
-    public Boolean getPreexisting() {
-        return preexisting;
-    }
+	/**
+	 * Getter for displayExtension.
+	 * @return displayExtension.
+	 */
+	public String getDisplayExtension() {
+		return displayExtension;
+	}
 
-    /**
-     * Getter for path.
-     * @return path.
-     */
-    public String getPath() {
-        return path;
-    }
+	/**
+	 * Getter for description.
+	 * @return description.
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * Getter for recursive.
-     * @return recursive.
-     */
-    public Boolean getRecursive() {
-        return recursive;
-    }
+	/**
+	 * Getter for preexisting.
+	 * @return preexisting.
+	 */
+	public Boolean getPreexisting() {
+		return preexisting;
+	}
 
-    /**
-     * Getter for type.
-     * @return type.
-     */
-    public PersonType getType() {
-        return type;
-    }
+	/**
+	 * Getter for path.
+	 * @return path.
+	 */
+	public String getPath() {
+		return path;
+	}
 
-    /**
-     * Getter for distributionBy.
-     * @return distributionBy.
-     */
-    public String getDistributionBy() {
-        return distributionBy;
-    }
+	/**
+	 * Getter for recursive.
+	 * @return recursive.
+	 */
+	public Boolean getRecursive() {
+		return recursive;
+	}
 
-    /**
-     * Getter for key.
-     * @return key.
-     */
-    public String getKey() {
-        return key;
-    }
+	/**
+	 * Getter for type.
+	 * @return type.
+	 */
+	public PersonType getType() {
+		return type;
+	}
 
-    /**
-     * Getter for uid.
-     * @return uid.
-     */
-    public String getUid() {
-        return uid;
-    }
+	/**
+	 * Getter for distributionBy.
+	 * @return distributionBy.
+	 */
+	public String getDistributionBy() {
+		return distributionBy;
+	}
 
-    /**
-     * Getter for value.
-     * @return value.
-     */
-    public Boolean getValue() {
-        return value;
-    }
+	/**
+	 * Getter for key.
+	 * @return key.
+	 */
+	public String getKey() {
+		return key;
+	}
 
-    /**
-     * Getter for right.
-     * @return right.
-     */
-    public String getRight() {
-        return right;
-    }
+	/**
+	 * Getter for uid.
+	 * @return uid.
+	 */
+	public String getUid() {
+		return uid;
+	}
 
-    /**
-     * Getter for create.
-     * @return create.
-     */
-    public Boolean getCreate() {
-        return create;
-    }
+	/**
+	 * Getter for value.
+	 * @return value.
+	 */
+	public Boolean getValue() {
+		return value;
+	}
 
-    /**
-     * Getter for defaultValue.
-     * @return defaultValue.
-     */
-    public String getDefaultValue() {
-        return defaultValue;
-    }
+	/**
+	 * Getter for right.
+	 * @return right.
+	 */
+	public String getRight() {
+		return right;
+	}
+
+	/**
+	 * Getter for create.
+	 * @return create.
+	 */
+	public Boolean getCreate() {
+		return create;
+	}
+
+	/**
+	 * Getter for defaultValue.
+	 * @return defaultValue.
+	 */
+	public String getDefaultValue() {
+		return defaultValue;
+	}
 
 	/**
 	 * Getter for conditionGroupExt.
@@ -381,4 +388,12 @@ public class SGSAttributeHandler implements Serializable {
 	public Pattern getConditionGroupExt() {
 		return conditionGroupExt;
 	}
+
+	/**
+	 * @return the treeCharSeparator
+	 */
+	public String getTreeCharSeparator() {
+		return treeCharSeparator;
+	}
+
 }

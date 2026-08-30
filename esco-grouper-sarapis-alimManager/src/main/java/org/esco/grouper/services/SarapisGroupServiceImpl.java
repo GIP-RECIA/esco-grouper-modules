@@ -18,14 +18,12 @@
  */
 package org.esco.grouper.services;
 
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import edu.internet2.middleware.grouper.GrouperSession;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.esco.grouper.cache.SGSCache;
@@ -39,8 +37,7 @@ import org.esco.grouper.exceptions.EscoGrouperException;
 import org.esco.grouper.parsing.SGSParsingUtil;
 import org.esco.grouper.utils.GrouperSessionUtil;
 
-
-
+import edu.internet2.middleware.grouper.GrouperSession;
 
 /**
  * Implementation of the groups service.
@@ -92,11 +89,11 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 
 		Validate.notNull(this.grouperSessionUtil,
 				"property grouperSessionUtil of class " + this.getClass().getName()
-				+ " can not be null");
+						+ " can not be null");
 
 		Validate.notNull(this.parsingUtil,
 				"property parsingUtil of class " + this.getClass().getName()
-				+ " can not be null");
+						+ " can not be null");
 
 		// Parses the configuration file to read the group and folders definitions.
 		parsingUtil.parse();
@@ -120,12 +117,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 				}
 			} else {
 				// Error: one of the preexisting group or folder can't be retrieved from Grouper.
-				String msg = "Unable to retrieve ";
-				if (definition.isGroup()) {
-					msg += "group";
-				} else {
-					msg += "folder";
-				}
+				String msg = "Unable to retrieve " + definition.getType();
 				msg += " for the preexisting definition: " + definition;
 				LOGGER.fatal(msg);
 				grouperSessionUtil.stopSession(session);
@@ -167,8 +159,6 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 		grouperSessionUtil.stopSession(session);
 	}
 
-
-
 	/**
 	 * Handles the groups or folders definition template to create even if there is no
 	 * memebrs to add.
@@ -178,18 +168,17 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 	 */
 	protected GrouperOperationResultDTO handlesEmptyGroupsOrFoldersDefinitionTemplates(
 			final GrouperSession session,
-			final String...attributes) {
+			final String... attributes) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(SEP);
 			LOGGER.debug("Handles empty groups or folders templates to create.");
 			LOGGER.debug(SEP);
 		}
-		final Iterator<GroupOrFolderDefinition> it =
-			definitionsManager.getGroupsOrFoldersTemplatesToCreate(attributes);
+		final Iterator<GroupOrFolderDefinition> it = definitionsManager.getGroupsOrFoldersTemplatesToCreate(attributes);
 
 		while (it.hasNext()) {
 
-			final GroupOrFolderDefinition def =  it.next();
+			final GroupOrFolderDefinition def = it.next();
 			if (SGSCache.instance().emptyTemplateIsCached(def)) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Definition " + def + " already handled.");
@@ -223,7 +212,6 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 		return GrouperOperationResultDTO.RESULT_OK;
 	}
 
-
 	/**
 	 * Updates the memberships for a given user and a set of attributes.
 	 * @param type The type of user (student, teacher, etc.)
@@ -233,7 +221,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 	 */
 	protected GrouperOperationResultDTO updateGroups(final PersonType type,
 			final String userId,
-			final String...attributes) {
+			final String... attributes) {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(SEP);
@@ -243,9 +231,8 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 			LOGGER.debug(SEP);
 		}
 		final GrouperSession session = grouperSessionUtil.createSession();
-		final Set<String> previousManagedGroups =  new HashSet<String>();
-		GrouperOperationResultDTO result =
-			grouperDAO.retrieveManagedGroups(session, userId, previousManagedGroups);
+		final Set<String> previousManagedGroups = new HashSet<>();
+		GrouperOperationResultDTO result = grouperDAO.retrieveManagedGroups(session, userId, previousManagedGroups);
 
 		if (result.isError()) {
 			LOGGER.error("Error while retrieving the previous managed groups for user: " + userId);
@@ -277,7 +264,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 	 */
 	protected GrouperOperationResultDTO addToGroups(final PersonType type,
 			final String userId,
-			final String...attributes) {
+			final String... attributes) {
 		final GrouperSession session = grouperSessionUtil.createSession();
 		GrouperOperationResultDTO result = handlesEmptyGroupsOrFoldersDefinitionTemplates(session, attributes);
 		if (!result.isError()) {
@@ -298,7 +285,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 	protected GrouperOperationResultDTO addToGroups(final PersonType type,
 			final String userId,
 			final GrouperSession session,
-			final String...attributes) {
+			final String... attributes) {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(SEP);
@@ -309,8 +296,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 		}
 
 		// Handles specific memberships.
-		final Iterator<GroupOrFolderDefinition> specificMemberships =
-			definitionsManager.getMemberships(type, attributes);
+		final Iterator<GroupOrFolderDefinition> specificMemberships = definitionsManager.getMemberships(type, attributes);
 
 		while (specificMemberships.hasNext()) {
 			final GrouperOperationResultDTO result = grouperDAO.addMember(session,
@@ -321,8 +307,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 		}
 
 		// Handles memberships for all type of persons.
-		final Iterator<GroupOrFolderDefinition> allMemberships =
-			definitionsManager.getMemberships(PersonType.ALL, attributes);
+		final Iterator<GroupOrFolderDefinition> allMemberships = definitionsManager.getMemberships(PersonType.ALL, attributes);
 
 		while (allMemberships.hasNext()) {
 			final GrouperOperationResultDTO result = grouperDAO.addMember(session,
@@ -354,12 +339,10 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 			final String userId,
 			final GrouperSession session,
 			final Set<String> previousManagedGroups,
-			final String...attributes) {
-
+			final String... attributes) {
 
 		// Handles specific memberships.
-		final Iterator<GroupOrFolderDefinition> specificMemberships =
-			definitionsManager.getMemberships(type, attributes);
+		final Iterator<GroupOrFolderDefinition> specificMemberships = definitionsManager.getMemberships(type, attributes);
 
 		while (specificMemberships.hasNext()) {
 			final GroupOrFolderDefinition groupDefinition = specificMemberships.next();
@@ -385,8 +368,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 		}
 
 		// Handles memberships for all type of persons.
-		final Iterator<GroupOrFolderDefinition> allMemberships =
-			definitionsManager.getMemberships(PersonType.ALL, attributes);
+		final Iterator<GroupOrFolderDefinition> allMemberships = definitionsManager.getMemberships(PersonType.ALL, attributes);
 
 		while (allMemberships.hasNext()) {
 			final GroupOrFolderDefinition groupDefinition = allMemberships.next();
@@ -411,8 +393,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 		}
 
 		// Removes the user from its old managed groups.
-		final GrouperOperationResultDTO result =
-			grouperDAO.removeFromGroups(session, userId, previousManagedGroups);
+		final GrouperOperationResultDTO result = grouperDAO.removeFromGroups(session, userId, previousManagedGroups);
 		if (result.isError()) {
 			return result;
 		}
@@ -484,7 +465,6 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 		this.parsingUtil = parsingUtil;
 	}
 
-
 	/**
 	 * Adds a person to groups.
 	 * @param personDescription The description of the person.
@@ -494,7 +474,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 	public GrouperOperationResultDTO addToGroups(final IEntityDescription personDescription) {
 		GrouperOperationResultDTO result = GrouperOperationResultDTO.RESULT_OK;
 		for (String[] attrValues : personDescription.getValuesArrays()) {
-			result =  addToGroups(personDescription.getType(),
+			result = addToGroups(personDescription.getType(),
 					personDescription.getId(),
 					attrValues);
 			if (result.isError()) {
@@ -513,7 +493,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 	public GrouperOperationResultDTO updateMemberships(final IEntityDescription personDescription) {
 		GrouperOperationResultDTO result = GrouperOperationResultDTO.RESULT_OK;
 		for (String[] attrValues : personDescription.getValuesArrays()) {
-			result =  updateGroups(personDescription.getType(),
+			result = updateGroups(personDescription.getType(),
 					personDescription.getId(), attrValues);
 			if (result.isError()) {
 				return result;
@@ -552,6 +532,7 @@ public class SarapisGroupServiceImpl implements ISarapisGroupService {
 
 		return result;
 	}
+
 	/**
 	 * Removes a person from the groups, including the groups not managed by this service.
 	 * @param userId The id of the person to remove from the groups.

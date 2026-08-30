@@ -71,13 +71,7 @@ public class GrouperSessionUtil{
             }
             return session;
 
-        } catch (SubjectNotFoundException e) {
-            LOGGER.error(e, e);
-            throw new EscoGrouperException(e);
-        } catch (SubjectNotUniqueException e) {
-            LOGGER.error(e, e);
-            throw new EscoGrouperException(e);
-        } catch (SessionException e) {
+        } catch (SubjectNotFoundException | SubjectNotUniqueException | SessionException e) {
             LOGGER.error(e, e);
             throw new EscoGrouperException(e);
         }

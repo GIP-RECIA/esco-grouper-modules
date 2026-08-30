@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ELEMENT sarapis-group-service (comment?, user, delete-empty-folders?, delete-empty-groups?, force-privileges?, ordered-template-elements?, (folder|folder-template)+) >
+<!ELEMENT sarapis-group-service (comment?, user, delete-empty-folders?, delete-empty-groups?, force-privileges?, ordered-template-elements?, (folder|folder-template|dynamic-tree-template)+) >
 <!ELEMENT ordered-template-elements (comment?, template-element+)>
 <!ELEMENT template-element ANY>
-<!ELEMENT folder (comment?, privileges?,(folder|folder-template|group|group-template)*) >
-<!ELEMENT folder-template (comment?, privileges?,(folder|folder-template|group|group-template)*) >
+<!ELEMENT folder (comment?, privileges?,(folder|folder-template|group|group-template|dynamic-tree-template)*) >
+<!ELEMENT folder-template (comment?, privileges?,(folder|folder-template|group|group-template|dynamic-tree-template)*) >
 <!ELEMENT group (comment?, privileges?, member-of*, members*) >
+
 <!ELEMENT group-template (comment?, privileges?, member-of*, members*) >
+<!ELEMENT dynamic-tree-template (comment?, privileges?, member-of*, members*) >
 <!ELEMENT privileges (comment?, privilege+) >
 <!ELEMENT comment ANY>
 <!ELEMENT privilege ANY>
@@ -58,6 +60,12 @@
 	display-extension CDATA #REQUIRED
 	description CDATA #REQUIRED
 	create CDATA #IMPLIED>
+
+<!ATTLIST dynamic-tree-template
+	extension CDATA #REQUIRED
+	display-extension CDATA #REQUIRED
+	description CDATA #REQUIRED
+	tree-char-separator CDATA #IMPLIED>
 
 <!ATTLIST privilege
 	right CDATA #REQUIRED
