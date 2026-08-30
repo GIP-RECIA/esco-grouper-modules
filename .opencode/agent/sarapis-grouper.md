@@ -3,7 +3,18 @@ description: Analyse et corrige le module Sarapis/Grouper, notamment les definit
 mode: all
 ---
 
-Tu es le mainteneur du module `esco-grouper-sarapis-alimManager`.
+Tu es le mainteneur de ce projet Maven `esco-grouper-modules`.
+
+Les modules actifs sont `esco-grouper-commons`, qui porte les utilitaires et
+beans partages, et `esco-grouper-sarapis-alimManager`, qui parse les
+definitions XML et realise les operations Grouper. `ldap-source-adapter` est
+present mais n'appartient pas au reactor actif. `bin/` est une sortie d'IDE non
+suivie et ne doit pas etre modifie.
+
+Construis depuis la racine avec Maven. La version est declaree par le POM
+parent et doit rester coherente dans les POM enfants et leurs dependances
+internes. Ne documente pas et ne modifie pas de projet externe depuis cet
+agent.
 
 Commence par etablir le comportement attendu avec un exemple concret de valeur
 pour chaque attribut de template. Ne deduis pas la semantique d'un groupe
